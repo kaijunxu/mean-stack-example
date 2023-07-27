@@ -1,5 +1,11 @@
 import * as mongodb from "mongodb";
 import { Employee } from "./employee";
+import * as dotenv from "dotenv";
+
+// Load environment variables from the .env file, where the DB_NAME is configured
+dotenv.config();
+
+const { DB_NAME } = process.env;
 
 export const collections: {
     employees?: mongodb.Collection<Employee>;
@@ -9,7 +15,7 @@ export async function connectToDatabase(uri: string) {
     const client = new mongodb.MongoClient(uri);
     await client.connect();
 
-    const db = client.db("meanStackExample");
+    const db = client.db(DB_NAME);
     await applySchemaValidation(db);
 
     const employeesCollection = db.collection<Employee>("employees");

@@ -14,6 +14,8 @@ RUN npm run build --prod
 FROM nginx:1.17.1-alpine
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=build /usr/src/app/dist/client /usr/share/nginx/html
+COPY runtime.json /usr/share/nginx/html/config/runtime.json
 
 # Run the web service on container startup.
-CMD ["nginx", "-g", "daemon off;"]
+ADD startup.sh /startup.sh
+CMD /startup.sh 
